@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>自己インフォ</title>
+    <style>
+        body {
+            display: flex;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            transition: background-image 0.5s;
+            color: white;
+        }
+        .menu-bar {
+            width: 200px;
+            background-color: hsl(0, 0%, 19%);
+            color: white;
+            padding: 20px;
+            box-sizing: border-box;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu-bar a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            color: white;
+            padding: 47px 25px 25px 0;
+            text-decoration: none;
+            margin: 20px 0;
+            cursor: pointer;
+        }
+        .menu-bar img {
+            width: 40%;
+            height: auto;
+        }
+        .menu-bar a:hover {
+            background-color: hsl(0, 0%, 0%);
+        }
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .news-content {
+            background-color: hsl(0, 0%, 19%);
+            padding: 20px;
+            border: 1px solid #555;
+            border-radius: 5px;
+        }
+        .top-left-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 180px;
+            height: auto;
+            margin: 10px;
+        }
+        .extra-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 15px;
+        }
+        .extra-links a {
+            background-color: hsl(0, 0%, 19%);
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border: 2px solid white; /* 白色の外枠 */
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .extra-links a:hover {
+            background-color: hsl(0, 0%, 25%);
+        }
+    </style>
+</head>
+<body oncontextmenu="changeBackground(event)">
+
+    <img src="自己インフォ.png" alt="写真" class="top-left-image">
+
+    <div class="menu-bar" id="menuBar">
+        <div>
+            <a id="link-manga" href="https://www.cmoa.jp" oncontextmenu="editLink(event, 'link-manga')"><img src="漫画.png" alt="漫画"></a>
+            <a id="link-movie" href="https://www.netflix.com/browse" oncontextmenu="editLink(event, 'link-movie')"><img src="映画.png" alt="映画"></a>
+            <a id="link-school" href="https://portal.iwasaki.ac.jp/lms/" oncontextmenu="editLink(event, 'link-school')"><img src="学校.png" alt="学校"></a>
+            <a id="link-memo" href="http://www.drpartners.jp/tools/browser-memocho.htm" oncontextmenu="editLink(event, 'link-memo')"><img src="メモ.png" alt="メモ"></a>
+            <a id="link-calendar" href="カレンダー.html" oncontextmenu="editLink(event, 'link-calendar')"><img src="カレンダー.png" alt="カレンダー"></a>
+        </div>
+        <div>
+            <a id="link-profile" href="プロフィール編集.html" oncontextmenu="editLink(event, 'link-profile')"><img src="プロフィ.png" alt="プロフィール編集"></a>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="news-content">
+            <h2>自己インフォへ、ようこそ</h2>
+            <p>ここに最新のニュースが表示されます。</p>
+            <p>詳細な内容を追加することができます。</p>
+        </div>
+    </div>
+
+    <div class="extra-links">
+        <a href="https://cyberboogie.github.io/RecipeGacha/">追コ①</a>
+        <a href="https://cyberboogie.github.io/StressCheck/">追コ②</a>
+    </div>
+
+    <input type="file" id="bg-pic" style="display: none;" accept="image/*" onchange="setBackground(event)">
+
+    <script>
+        function setBackground(event) {
+            const reader = new FileReader();
+            reader.onload = function () {
+                document.body.style.backgroundImage = `url(${reader.result})`;
+                localStorage.setItem('backgroundImage', reader.result);
+            };
+            reader.readAsDataURL(event.target.files[0]);
+        }
+
+        function changeBackground(event) {
+            event.preventDefault();
+            const fileInput = document.getElementById('bg-pic');
+            fileInput.click();
+        }
+
+        function editLink(event, id) {
+            event.preventDefault();
+            const currentLink = document.getElementById(id).href;
+            const newLink = prompt("新しいリンク先を入力してください:", currentLink);
+            if (newLink) {
+                document.getElementById(id).href = newLink;
+                localStorage.setItem(id, newLink);
+            }
+        }
+
+        window.onload = function () {
+            // 背景画像を復元
+            const savedBackground = localStorage.getItem('backgroundImage');
+            if (savedBackground) {
+                document.body.style.backgroundImage = `url(${savedBackground})`;
+            }
+
+            // 各リンクを復元
+            const links = ["link-manga", "link-movie", "link-school", "link-memo", "link-calendar", "link-profile"];
+            links.forEach(id => {
+                const savedLink = localStorage.getItem(id);
+                if (savedLink) {
+                    document.getElementById(id).href = savedLink;
+                }
+            });
+        };
+    </script>
+
+</body>
+</html>
